@@ -37,6 +37,7 @@ package net.fortuna.ical4j.model;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -107,17 +108,14 @@ public class TimeZoneRegistryImpl implements TimeZoneRegistry {
      * Loads an existing VTimeZone from the classpath corresponding to the
      * specified Java timezone.
      */
-    private static VTimeZone loadVTimeZone(final String id) {
-//    throws IOException,
-//    ParserException {    
-//        String resource = "/" + id + ".ics";
-//        URL resource = TimeZoneRegistryImpl.class.getResource("/" + id + ".ics");
-//        if (resource != null) {
-//            CalendarBuilder builder = new CalendarBuilder();
-//            Calendar calendar = builder.build(resource.openStream());
-//            return (VTimeZone) calendar.getComponents().getComponent(
-//                    Component.VTIMEZONE);
-//        }
+    private static VTimeZone loadVTimeZone(final String id) throws IOException, ParserException {
+        // String resource = "/" + id + ".ics";
+        URL resource = TimeZoneRegistryImpl.class.getResource("/" + id + ".ics");
+        if (resource != null) {
+            CalendarBuilder builder = new CalendarBuilder();
+            Calendar calendar = builder.build(resource.openStream(), "utf-8");
+            return (VTimeZone) calendar.getComponents().getComponent(Component.VTIMEZONE);
+        }
         return null;
     }
 }
